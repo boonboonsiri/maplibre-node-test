@@ -38,6 +38,8 @@ request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', function (err, res
     if (res.statusCode == 200) {
         let style = JSON.parse(body);
 
+        // MODIFY STYLE HERE if desired
+
         map.load(style);
         
 
