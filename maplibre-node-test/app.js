@@ -46,7 +46,10 @@ request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', function (err, res
         map.setCenter([-63.8298, 42.5512]);
         map.setZoom(13);
 
-        let render_options = {};
+        let render_options = {
+            width: 512,
+            height: 512
+        };
         map.render(render_options, function (err, buffer) {
             if (err) throw err;
 
