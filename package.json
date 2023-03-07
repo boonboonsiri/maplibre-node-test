@@ -9,15 +9,11 @@
   "author": "",
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=10 <11"
+    "node": "18"
   },
   "dependencies": {
-    "@acalcutt/maplibre-gl-native": "^5.0.25",
-    "@mapbox/mapbox-gl-native": "^5.0.2",
-    "fs": "0.0.1-security",
-    "path": "^0.12.7",
+    "@maplibre/maplibre-gl-native": "5.2.0-pre.0",
     "request": "^2.88.2",
-    "sharp": "^0.26.2",
-    "url": "^0.11.0"
+    "sharp": "^0.31.3"
   }
 }
