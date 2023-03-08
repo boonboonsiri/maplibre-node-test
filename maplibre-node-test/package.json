@@ -10,9 +10,7 @@
   "dependencies": {
     "@maplibre/maplibre-gl-native": "5.2.0-pre.0",
     "eslint": "^8.35.0",
-    "path": "^0.12.7",
     "request": "^2.88.2",
-    "sharp": "^0.31.3",
-    "url": "^0.11.0"
+    "sharp": "^0.31.3"
   }
 }
