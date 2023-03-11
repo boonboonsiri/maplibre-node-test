@@ -24,6 +24,8 @@ let options = {
                 response.data = body;
 
                 callback(null, response);
+            } else if (res.statusCode == 204) {
+                callback();
             } else {
                 callback(new Error(JSON.parse(body).message));
             }
@@ -43,17 +45,11 @@ request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', function (err, res
         map.load(style);
         
 
-        map.setCenter([-63.8298, 42.5512]);
+        map.setCenter([-98.5795, 39.8282]);
         map.setZoom(13);
 
-        let render_options = {
-            width: 512,
-            height: 512
-        };
-        map.render(render_options, function (err, buffer) {
+        map.render(function (err, buffer) {
             if (err) throw err;
-
-            map.release();
 
             var image = sharp(buffer, {
                 raw: {
@@ -66,6 +62,46 @@ request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', function (err, res
             // Convert raw image buffer to PNG
             image.toFile('Z13.png', function (err) {
                 if (err) throw err;
+            });
+
+            map.setZoom(10);
+
+            map.render(function (err, buffer) {
+                if (err) throw err;
+
+                var image = sharp(buffer, {
+                    raw: {
+                        width: 512,
+                        height: 512,
+                        channels: 4
+                    }
+                });
+
+                // Convert raw image buffer to PNG
+                image.toFile('Z10.png', function (err) {
+                    if (err) throw err;
+                });
+
+                map.setCenter([-88.5795, 39.8282]);
+
+                map.render(function (err, buffer) {
+                    if (err) throw err;
+
+                    var image = sharp(buffer, {
+                        raw: {
+                            width: 512,
+                            height: 512,
+                            channels: 4
+                        }
+                    });
+
+                    // Convert raw image buffer to PNG
+                    image.toFile('Z10_2.png', function (err) {
+                        if (err) throw err;
+                    });
+
+                });
+
             });
 
         });
