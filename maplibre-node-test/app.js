@@ -35,6 +35,7 @@ let options = {
 
 var map = new mlgl.Map(options);
 
+// Approach 1
 request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', function (err, res, body) {
     if (err) throw err;
     if (res.statusCode == 200) {
@@ -44,69 +45,83 @@ request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', function (err, res
 
         map.load(style);
         
-
-        map.setCenter([-98.5795, 39.8282]);
-        map.setZoom(13);
-
-        map.render(function (err, buffer) {
+        let image = null;
+        const imageCallback = (err, buffer) => {
             if (err) throw err;
 
-            var image = sharp(buffer, {
+            image = sharp(buffer, {
                 raw: {
                     width: 512,
                     height: 512,
                     channels: 4
                 }
             });
+        }
 
-            // Convert raw image buffer to PNG
-            image.toFile('Z13.png', function (err) {
+        map.setCenter([-98.5795, 39.8282]);
+        map.setZoom(13);
+        map.render(imageCallback);
+
+        // Convert raw image buffer to PNG
+        image.toFile('Z13.png', function (err) {
+            if (err) throw err;
+        });
+        
+        map.setZoom(10);
+        map.render(imageCallback);
+
+        // Convert raw image buffer to PNG
+        image.toFile('Z10.png', function (err) {
+            if (err) throw err;
+        });
+
+        map.setCenter([-88.5795, 39.8282]);
+        map.render(imageCallback);
+
+        // Convert raw image buffer to PNG
+        image.toFile('Z10_2.png', function (err) {
+            if (err) throw err;
+        });
+    }
+});
+
+// Approach 2
+request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', function (err, res, body) {
+    if (err) throw err;
+    if (res.statusCode == 200) {
+        let style = JSON.parse(body);
+
+        // MODIFY STYLE HERE if desired
+
+        map.load(style);
+        
+        const renderImage = filename => {
+            map.render((err, buffer) => {
                 if (err) throw err;
-            });
 
-            map.setZoom(10);
-
-            map.render(function (err, buffer) {
-                if (err) throw err;
-
-                var image = sharp(buffer, {
+                let image = sharp(buffer, {
                     raw: {
                         width: 512,
                         height: 512,
                         channels: 4
                     }
                 });
-
+                
                 // Convert raw image buffer to PNG
-                image.toFile('Z10.png', function (err) {
+                image.toFile(filename, function (err) {
                     if (err) throw err;
                 });
-
-                map.setCenter([-88.5795, 39.8282]);
-
-                map.render(function (err, buffer) {
-                    if (err) throw err;
-
-                    var image = sharp(buffer, {
-                        raw: {
-                            width: 512,
-                            height: 512,
-                            channels: 4
-                        }
-                    });
-
-                    // Convert raw image buffer to PNG
-                    image.toFile('Z10_2.png', function (err) {
-                        if (err) throw err;
-                    });
-
-                });
-
             });
+        }
+        
+        map.setCenter([-98.5795, 39.8282]);
+        map.setZoom(13);
+        renderImage('Z13.png');
 
-        });
+        map.setZoom(10);
+        renderImage('Z10.png');
 
-
-
+        map.setCenter([-88.5795, 39.8282]);
+        renderImage('Z10_2.png');
     }
 });
