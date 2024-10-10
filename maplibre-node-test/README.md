@@ -1,3 +1,0 @@
-# maplibre-node-test
-
-

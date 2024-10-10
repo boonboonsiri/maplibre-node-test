@@ -50,10 +50,12 @@ request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', async (err, res, b
             });
         }
 		
-		for(var i=0;i<100;i++){
+		let max = 50
+		for(var i=1;i<=max;i++){
 			let filename=i+'.png';
 			map.setCenter([-98.5795, 39.8282]);
 			map.setZoom(13);
+			console.log('Rendering ' + i + ' of ' + max);
 			await renderImage(filename);
 		}
     }
