@@ -5,7 +5,6 @@ let sharp = require('sharp');
 let mlgl = require('@maplibre/maplibre-gl-native');
 let request = require('request');
 
-
 var map = new mlgl.Map();
 
 request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', async (err, res, body) => {
@@ -13,12 +12,15 @@ request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', async (err, res, b
     if (res.statusCode == 200) {
         let style = JSON.parse(body);
 
-        // MODIFY STYLE HERE if desired
-
-        map.load(style);
-
         const renderImage = async filename => {
             await new Promise((resolve, reject) => {
+
+                // MODIFY STYLE HERE if desired
+                map.release()
+                map = new mlgl.Map();
+
+                map.load(style);
+
                 map.render(async (err, buffer) => {
                     if (err) {
                         reject(err);
@@ -49,8 +51,8 @@ request('https://tiles.wifidb.net/styles/WDB_OSM/style.json', async (err, res, b
                 });
             });
         }
-        
-        let max = 50
+
+        let max = 200
         for(var i=1;i<=max;i++){
             let filename=i+'.png';
             map.setCenter([-98.5795, 39.8282]);
